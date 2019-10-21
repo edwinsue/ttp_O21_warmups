@@ -1,21 +1,22 @@
--- YET ANOTHER CASE WHEN PROBLEM :D
+WITH holiday_films AS (
+	SELECT 
+	title,
+	description,
+	CASE 
+	WHEN title ILIKE '%christmas%' OR description ILIKE '%christmas%' THEN 'Christmas' 
+	WHEN title ILIKE '%thanksgiving%' OR description ILIKE '%thanksgiving%' THEN 'Thanksgiving' 
+	WHEN title ILIKE '%halloween%' OR description ILIKE '%halloween%' THEN 'Halloween'
+	WHEN title ILIKE '%new year%' OR description ILIKE '%new year%' THEN 'New Year'
+	ELSE NULL
+	END AS Holiday,
+	rental_rate
+	FROM film
+	ORDER BY holiday ASC, title ASC
+)
 
--- Return the titles and descriptions of all films, with a new column "Holiday",
--- that contains the holiday referenced in the film, if any, otherwise is blank.
--- all holiday's welcome :) 
-
--- EXAMPLE: 
--- title: "Fiction Christmas" -> 'Christmas'
--- description: "The story of a chritmas elf who ...." --> 'Christmas'
--- "Something About Mary" --> ""
-
--- BONUS: return all of the holiday films first, and sort all films with their 
--- respective holiday category in alphabetical order.
-
--- BONUS BONUS:
--- Our marketing team is doing a holiday promo. All holiday films 1/2.
--- Can you return the same results, but with the price reflecting the discount?
-
--- Feel free to peek at your previous warmup to remind yourself of the syntax.
-
-
+SELECT 
+*,
+CASE WHEN Holiday IS NOT NULL THEN ROUND(rental_rate * 0.5,2)
+ELSE rental_rate
+END AS promo_rate
+FROM holiday_films
